@@ -96,3 +96,20 @@ for(i in 1:n){
   averages2[i] <- mean(X)
 } 
 mean((abs(averages2 - avg_data)) > 1)
+
+#Probability Distributions Exercises
+install.packages("gapminder")
+library(gapminder)
+data(gapminder)
+head(gapminder)
+
+#Q1:What is the proportion of countries in 1952 that have a life expectancy less than or equal to 40?
+library(dplyr)
+y <- filter(gapminder, year=="1952") %>% select(lifeExp) %>% unlist
+head(y)
+mean(y <= 40)
+
+#Q2:What is the proportion of countries in 1952 that have a life expectancy between 40 and 60 years? 
+#Hint: this is the proportion that have a life expectancy less than or equal to 60 years, minus the proportion that have a life expectancy less than or equal to 40 years.
+mean(y <= 60) - mean(y <= 40)
+
