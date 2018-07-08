@@ -261,3 +261,42 @@ mean(avgs)
 library(rafalib)
 popsd(avgs)
 
+#CLT and t-test Notes
+
+N <- length(treatment)
+obs <- mean (treatment) - mean(control)
+se <- sqrt( var(treatment)/N + var(control)/N)
+tstat <- obs/se
+
+2*(1- pnorm(tstat))
+
+n <- 10000
+nulls <- vector('numeric',n)
+for (i in 1:n){
+  control <- sample( femaleControlsPopulation, 3)
+  treatment <- sample(femaleControlsPopulation,3)
+  se <- sqrt( var(treatment)/3 + var(control)/3)
+  nulls[i] <- (mean(treatment) - mean(control))/se
+}
+mean(abs(nulls) > obs)
+
+install.packages("rafalib")
+library(rafalib)
+mypar()
+qqnorm(nulls)
+abline(0,1)
+qqline(nulls)
+
+#In this case we will use t distribution approximation 
+control <- filter(femaleMiceWeights, Diet == "chow") %>% select(Bodyweight) %>% unlist
+treatment <- filter(femaleMiceWeights, Diet == "hf") %>% select(Bodyweight) %>% unlist
+ttest <- t.test(treatment,control)
+
+#But first check if the data is somewhat normally distributed so that you can decide if you can apply t distribution
+mypar(1,1)
+qqnorm(control)
+qqline(control)
+qqnorm(treatment)
+qqline(treatment)
+
+
